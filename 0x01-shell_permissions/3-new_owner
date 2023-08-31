@@ -1,2 +1,2 @@
 #!/bin/bash
-chrgp betty hello
+chown betty hello
