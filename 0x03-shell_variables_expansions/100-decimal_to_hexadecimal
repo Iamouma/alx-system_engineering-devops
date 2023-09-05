@@ -1,2 +1,2 @@
 #!/bin/bash
-echo {N..Z} $( echo {A..M} ) | tr -d ' '`
+printf '%x\n' $DECIMAL
