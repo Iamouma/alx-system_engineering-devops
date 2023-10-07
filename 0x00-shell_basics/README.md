@@ -1,1 +1,16 @@
-A script that prints the absolute path name of the current working directory
+This project is about Shell Basics.
+man or help:
+cd 
+ls
+pwd
+less
+file
+ln
+cp
+mv
+rm
+mkdir
+type
+which
+help
+man
