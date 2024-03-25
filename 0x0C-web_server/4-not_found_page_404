@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# install and configure nginx web server
+
+# install nginx
+apt-get -y update
+apt-get -y install nginx
+
+# allow NGINX to listen on port 80
+ufw allow 'Nginx HTTP'
+
+# Change content of /var/www/html/index.nginx-debian.html
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# start nginx
+service nginx start
+
+# configure nginx to redirect /redirect_me to https://www.youtube.com/watch?v=QH2-TGUlwu4
+
+sed -i 's/server_name _;/server_name _;\n\trewrite ^\/redirect_me https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 parmanent;/' /etc/nginx/sites-enabled/default
+
+# create custom 404 page
+echo 'Ceci n'est pas une page' > /var/www/html/404.html
+
+# configure custom 404 page on nginx
+sed -i 's/server_name _;/server_name _;\n\terror_page 404 \/404.html;/' /etc/nginx/sites-enabled/default
+service nginx restart
