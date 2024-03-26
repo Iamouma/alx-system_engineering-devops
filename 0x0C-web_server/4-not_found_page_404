@@ -1,14 +1,57 @@
 #!/usr/bin/env bash
-# Install nginx on your web-01 server
+# Updates and Installs nginx on your web-01 server
 
-sudo apt-get -y update
-sudo apt-get -y install nginx
-echo 'Hello World!' | sudo vi /var/www/html/index.html
-echo "Ceci n'est pas une page" | sudo vi /var/www/html/404.html
-sudo sed -i '/server_name _;/a \
-    error_page 404 /404.html;\n\
-    location = /404.html {\n\
-        internal;\n\
-    }' /etc/nginx/sites-available/default
+apt-get update
 
-sudo service nginx start
+# Install Nginx
+apt-get install -y nginx
+
+# Create the custom 404 page
+cat <<EOF > /usr/share/nginx/html/404.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>404 Not Found</h1>
+    <p>Ceci n'est pas une page</p>
+</body>
+</html>
+EOF
+
+# Create the custom 404 configuration file
+cat <<EOF > /etc/nginx/sites-available/custom_404
+server {
+    listen 80;
+    server_name _;
+
+    error_page 404 /404.html;
+
+    location = /404.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+
+    # Additional server configuration if needed
+}
+EOF
+
+# Create symbolic link to enable the configuration
+ln -s /etc/nginx/sites-available/custom_404 /etc/nginx/sites-enabled/
+
+# Remove default server block
+rm /etc/nginx/sites-enabled/default
+
+# Restart Nginx without using systemctl
+/etc/init.d/nginx restart
+
+# Verify Nginx status
+ps aux | grep nginx
+
+# Test the custom 404 page with curl
+if curl -s -IL http://localhost/non-existent-page | grep -q "404 Not Found"; then
+    echo "Nginx configured successfully. Custom 404 page is working."
+else
+    echo "Nginx configuration failed. Custom 404 page is not working as expected."
+fi
