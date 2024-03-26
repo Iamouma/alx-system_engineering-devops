@@ -1,40 +1,9 @@
 #!/usr/bin/env bash
-# Configure a new Nginx server so that /redirect_me is redirecting to another page
+#Configure a new Nginx server so that /redirect_me is redirecting to another page
 
-apt-get update
-
-# Install Nginx
-apt-get install -y nginx
-
-# Create the custom 301 redirect configuration file
-cat <<EOF > /etc/nginx/sites-available/redirect_me
-server {
-    listen 80;
-    server_name _;
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4
-    }
-
-    # Additional server configuration if needed
-}
-EOF
-
-# Create symbolic link to enable the configuration
-ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
-
-# Remove default server block
-rm /etc/nginx/sites-enabled/default
-
-# Restart Nginx without using systemctl
-/etc/init.d/nginx restart
-
-# Verify Nginx status
-ps aux | grep nginx
-
-# Test the redirection with curl
-if curl -s -IL http://localhost/redirect_me | grep -q "301 Moved Permanently"; then
-    echo "Nginx configured successfully. /redirect_me is redirecting with a 301 status."
-else
-    echo "Nginx configuration failed. /redirect_me is not redirecting as expected."
-fi
+sudo apt-get -y update
+sudo apt-get -y install nginx
+sudo ufw allow 'Nginx HTTP'
+echo "Hello World" | sudo tee /var/www/html/index
+sudo sed -i '/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/ permanent;' /etc/nginx/sites-available/default
+sudo service nginx restart
