@@ -1,4 +1,4 @@
 0x14. MySQL
-DevOps
-S sssyysddrfccysAdmin
+The DevOps
+The SysAdmin
 MySQL
