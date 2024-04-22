@@ -6,13 +6,13 @@ from requests import get
 from sys import argv
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     user_id = argv[1]
-    url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
+    url = "https://jsonplaceholder.typicode.com/users/{}".format(user_id)
     response = get(url)
     username = response.json().get('username')
 
-    url = 'https://jsonplaceholder.typicode.com/users/{}/todos'.format(user_id)
+    url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(user_id)
     response = get(url)
     tasks = response.json()
     dictionary = {user_id: []}
