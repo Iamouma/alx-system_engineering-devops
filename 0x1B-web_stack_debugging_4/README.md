@@ -171,7 +171,7 @@ GitHub repository: alx-system_engineering-devops
 Directory: 0x1B-web_stack_debugging_4
 File: 0-the_sky_is_the_limit_not.pp
    
-1. User limit
+### 1. User limit
 #advanced
 Score: 100.0% (Checks completed: 100.0%)
 Change the OS configuration so that it is possible to login with the holberton user and open a file without any error message.
